@@ -1,0 +1,52 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+*.sqlite3
+db.sqlite3
+media/
+staticfiles/
+
+# Environment variables
+.env
+.env.*
+
+# Migrations (optional, you can include them if you want)
+*/migrations/*.py
+*/migrations/*.pyc
+!*/migrations/__init__.py
+
+# Pytest cache
+.pytest_cache/
+
+# Docker
+*.pid
+*.sock
+docker-compose.override.yml
+docker-compose.override.*.yml
+.env.docker
+build/
+tmp/
+data/
+
+# IDEs / editors
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Python virtual environments
+venv/
+env/
+
+
+# Ignore env files
+*.env
+*.env.txt
+shoppingApp/.env
