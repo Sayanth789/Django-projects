@@ -1,0 +1,19 @@
+{% load thumbnail %}
+{% for image in images %}
+    <div class="image">
+        <a href="{{ image.get_absolute_url }}">
+            {% thumbnail image.image "300x300" crop="smart" as im %}
+            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+        </a>
+        <div class="info">
+            <a href="{{ image.get_absolute_url }}" class="title">{{ image.title }}</a>
+        </div>
+    </div>
+{% endfor %}
+
+<!-- This will display the list of images. -->
+<!-- We also normalize the size of the thumbnails to 300x300 pixels. Also use the smart cropping option. This option
+  indicates that the images has to be incrementally cropped down to the requested size by removing slices from the edges with 
+  the least entropy.
+-->
+

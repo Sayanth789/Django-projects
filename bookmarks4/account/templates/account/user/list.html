@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load thumbnail %}
+{% block title %}People{% endblock %}
+
+{% block content %}
+    <h1>People</h1>
+    <div id="people-list">
+        {% for user in users %}
+        <div class="user">
+            <a href="{{ user.get_absolute_url }}">
+
+            </a>
+            <div class="info">
+                <a href="{{ user.get_absolute_url }}" class="title">
+                    {{ user.get_full_name }}
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+<!-- This template allow to list all active users  on the site.-->
+ <!-- Iterating over the given users and use the {% thumbnail %} template tag form easy-thumbnail to generate profile image thumbnails --->

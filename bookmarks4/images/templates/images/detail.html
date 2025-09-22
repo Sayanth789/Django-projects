@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}{{ image.title }}{% endblock %}
+
+{% block content %}
+<h1>{{ image.title }}</h1>
+
+{% load thumbnail %}
+
+<!-- Display image thumbnail safely -->
+<a href="{{ image.image.url }}">
+    {% if image.image %}
+        {% thumbnail image.image "300x0" crop="smart" as im %}
+        <img src="{{ im.url }}" class="image-detail" alt="{{ image.title }}">
+    {% else %}
+        <img src="{% static 'default-image.png' %}" class="image-detail" alt="No image">
+    {% endif %}
+</a>
+
+<!-- Likes and views info -->
+{% with total_likes=image.users_like.count users_like=image.users_like.all %}
+<div class="image-info">
+    <div>
+        <span class="count">
+            <span class="total">{{ total_likes }}</span> {{ total_likes|pluralize }}
+        </span>
+        <span class="count">
+            {{ total_views }} view{{ total_views|pluralize }}
+        </span>
+        <a href="#" 
+           data-id="{{ image.id }}" 
+           data-action="{% if request.user in users_like %}un{% else %}like{% endif %}" 
+           class="Like button">
+            {% if request.user not in users_like %}Like{% else %}Unlike{% endif %}
+        </a>
+    </div>
+    {{ image.description|linebreaks }}
+</div>
+
+<!-- Display users who liked the image -->
+<div class="image-likes">
+    {% for user in users_like %}
+        <div>
+            {% if user.profile.photo %}
+                <img src="{{ user.profile.photo.url }}" alt="{{ user.username }}">
+            {% endif %}
+            <p>{{ user.first_name }}</p>
+        </div>
+    {% empty %}
+        Nobody likes this image yet.
+    {% endfor %}
+</div>
+{% endwith %}
+{% endblock %}
+
+{% block domready %}
+<script>
+const url = '{% url "images:like" %}';
+const csrftoken = '{{ csrf_token }}';
+
+document.querySelector('a.Like').addEventListener('click', function(e) {
+    e.preventDefault();
+    const likeButton = this;
+
+    // Build form data
+    const formData = new FormData();
+    formData.append('id', likeButton.dataset.id);
+    formData.append('action', likeButton.dataset.action);
+
+    // Request options
+    const options = {
+        method: 'POST',
+        headers: {'X-CSRFToken': csrftoken},
+        body: formData,
+        mode: 'same-origin'
+    };
+
+    // Send request
+    fetch(url, options)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'ok') {
+                const previousAction = likeButton.dataset.action;
+                const action = previousAction === 'like' ? 'unlike' : 'like';
+
+                // Update button text and dataset
+                likeButton.dataset.action = action;
+                likeButton.innerHTML = action.charAt(0).toUpperCase() + action.slice(1);
+
+                // Update like count
+                const likeCount = document.querySelector('span.count .total');
+                let totalLikes = parseInt(likeCount.innerHTML);
+                likeCount.innerHTML = previousAction === 'like' ? totalLikes + 1 : totalLikes - 1;
+            }
+        });
+});
+</script>
+{% endblock %}
+
+
+
+<!-- To extract JSON body content we use response.json() -->
+<!-- The FormData is created to construct a set of key/value pairs representing form fields and their values.-->
