@@ -1,0 +1,30 @@
+
+services:
+  web_base: &web_base
+    build: .
+    volumes:
+      - .:/code
+    environment:
+      PYTHONPATH: "/code/educa"
+      DJANGO_SETTINGS_MODULE: "educa.settings"
+
+  web_migrate:
+    <<: *web_base
+    command: python /code/manage.py migrate
+    depends_on:
+      - cache
+
+  web_run:
+    <<: *web_base
+    command: python /code/manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      - web_migrate
+      - cache
+
+  cache:
+    image: redis:7.2.4
+    restart: always
+    volumes:
+      - ./data/cache:/data

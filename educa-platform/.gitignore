@@ -1,0 +1,29 @@
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.so
+
+# Virtual environments
+env/
+venv/
+myshop/
+.env
+
+# Django
+*.sqlite3
+db.sqlite3
+/media/
+*.log
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Docker
+*.dockerignore
+docker-compose.override.yml
