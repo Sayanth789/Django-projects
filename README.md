@@ -7,6 +7,7 @@ This project demonstrates how to build a modular Django project with clean code 
 
 **bookmarks4**is a standalone Python/Django module (or project folder) in this repository for managing bookmarks or links.
 ---
+**Educa-Platform** Is a platform for learning via online. 
 
 ## Features
 
